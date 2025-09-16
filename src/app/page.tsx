@@ -150,7 +150,7 @@ export default function Home() {
               <div className="text-base font-light opacity-90 flex items-center gap-4">
                 powered by
                 <Image
-                  src="/Entraste_logo.png"
+                  src="/Entraste_Logo.png"
                   alt="Entraste"
                   width={120}
                   height={40}
