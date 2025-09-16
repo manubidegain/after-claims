@@ -2,6 +2,7 @@
 
 import OrderLookupForm from '@/components/OrderLookupForm';
 import TicketSelection from '@/components/TicketSelection';
+import Image from 'next/image';
 import { useState } from 'react';
 
 interface TicketData {
@@ -55,10 +56,13 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-start">
             <div className="text-white">
-              <h1 className="text-4xl md:text-6xl font-bold mb-2 tracking-wider">
-                KEY
-                <span className="block text-2xl md:text-4xl font-light">MOOD</span>
-              </h1>
+              <Image
+                src="/key-mood-logo.svg"
+                alt="KEY MOOD"
+                width={200}
+                height={100}
+                className="w-auto h-16 md:h-20"
+              />
             </div>
             <div className="text-right text-white">
               <div className="text-sm md:text-base font-light">SAB_</div>
