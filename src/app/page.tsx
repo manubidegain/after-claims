@@ -145,9 +145,23 @@ export default function Home() {
       {/* Footer */}
       <div className="relative z-10 pb-8">
         <div className="container mx-auto px-4">
-          <div className="text-right text-white">
-            <div className="text-sm font-light mb-2">AT HANGAR 33</div>
-            <div className="text-xs font-light">04 A 09 HS</div>
+          <div className="flex justify-between items-end">
+            <div className="text-left text-white">
+              <div className="text-base font-light opacity-90 flex items-center gap-4">
+                powered by
+                <Image
+                  src="/Entraste_logo.png"
+                  alt="Entraste"
+                  width={120}
+                  height={40}
+                  className="h-10 w-auto"
+                />
+              </div>
+            </div>
+            <div className="text-right text-white">
+              <div className="text-sm font-light mb-2">AT HANGAR 33</div>
+              <div className="text-xs font-light">04 A 09 HS</div>
+            </div>
           </div>
         </div>
       </div>
