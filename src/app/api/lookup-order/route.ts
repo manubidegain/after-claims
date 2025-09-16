@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
 
     if (validTickets.length === 0) {
       return NextResponse.json(
-        { error: 'Esta orden no tiene tickets válidos para el after' },
+        { error: 'Esta orden no tiene tickets válidos para el closing party' },
         { status: 400 }
       );
     }
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       console.log('Order already registered, returning registered info'); // Debug log
       return NextResponse.json({
         alreadyRegistered: true,
-        message: 'Esta orden ya fue registrada para el after',
+        message: 'Esta orden ya fue registrada para el closing party',
         registeredQuantity: existingOrder.quantity,
       });
     }

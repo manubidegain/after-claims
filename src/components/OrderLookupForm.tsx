@@ -70,7 +70,7 @@ export default function OrderLookupForm({ onOrderFound, onAlreadyRegistered }: O
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-white mb-2">
-          Key Mood After Party
+          Key Mood Closing Party
         </h3>
         <h3 className="text-white/90 mb-2">
           Hangar 33 - Open Doors 4:30
@@ -78,6 +78,12 @@ export default function OrderLookupForm({ onOrderFound, onAlreadyRegistered }: O
         <p className="text-white/80">
           Ingresa tu número de orden y email para continuar
         </p>
+
+        <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 mt-4">
+          <p className="text-red-200/90 text-sm">
+            ⚠️ <strong>IMPORTANTE:</strong> Solo podrás hacer este canje una única vez. Seleccioná correctamente la cantidad de tickets que querés recibir.
+          </p>
+        </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">

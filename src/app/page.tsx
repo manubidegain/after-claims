@@ -1,8 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import OrderLookupForm from '@/components/OrderLookupForm';
 import TicketSelection from '@/components/TicketSelection';
-import Image from 'next/image';
 import { useState } from 'react';
 
 interface TicketData {
@@ -117,7 +117,7 @@ export default function Home() {
                     Orden ya registrada
                   </div>
                   <p className="text-orange-200/80 mb-3">
-                    Esta orden ya fue registrada para el Key Mood After Party
+                    Esta orden ya fue registrada para el Key Mood Closing Party
                   </p>
                   <div className="text-orange-200/80 text-sm space-y-1">
                     <p><strong>Tickets registrados:</strong> {alreadyRegistered.quantity}</p>

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { saveAfterOrder } from '@/lib/database';
 
 export async function POST(request: NextRequest) {
@@ -30,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     if (!success) {
       return NextResponse.json(
-        { error: 'Error al guardar la información del after' },
+        { error: 'Error al guardar la información del closing party' },
         { status: 500 }
       );
     }

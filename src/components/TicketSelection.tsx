@@ -87,7 +87,7 @@ export default function TicketSelection({ ticketsData, totalTickets, onBack }: T
 Nos vemos el 20.9 a partir de las 04 am en Hangar 33
           </div>
           <p className="text-green-200/80">
-            Has seleccionado {selectedTickets.size} ticket{selectedTickets.size !== 1 ? 's' : ''} para el Key Mood After Party
+            Has seleccionado {selectedTickets.size} ticket{selectedTickets.size !== 1 ? 's' : ''} para el Key Mood Closing Party
           </p>
         </div>
         
@@ -118,7 +118,7 @@ Nos vemos el 20.9 a partir de las 04 am en Hangar 33
       <form onSubmit={handleSubmit} className="space-y-6">
         <div>
           <label className="block text-white font-medium mb-3">
-            Selecciona los tickets que quieres usar para el Key Mood After Party:
+            Selecciona los tickets que quieres usar para el Key Mood Closing Party:
           </label>
           <div className="space-y-3">
             {ticketsData.map((ticket) => (

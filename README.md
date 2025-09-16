@@ -158,7 +158,7 @@ Actualiza la cantidad de tickets para el after.
 ```json
 {
   "success": true,
-  "message": "Tickets del after actualizados correctamente",
+  "message": "Tickets del closing party actualizados correctamente",
   "tckid": "952508",
   "afterTickets": 2
 }
