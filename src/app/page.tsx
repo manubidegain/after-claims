@@ -160,7 +160,7 @@ export default function Home() {
             </div>
             <div className="text-right text-white">
               <div className="text-sm font-light mb-2">AT HANGAR 33</div>
-              <div className="text-xs font-light">04 A 09 HS</div>
+              <div className="text-xs font-light">04:30 A 09 HS</div>
             </div>
           </div>
         </div>
