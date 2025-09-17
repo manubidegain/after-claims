@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Key Mood Closing Party",
-  description: "Key Mood Closing Party",
+  title: "Key Mood Closing Show",
+  description: "Key Mood Closing Show",
 };
 
 export default function RootLayout({
