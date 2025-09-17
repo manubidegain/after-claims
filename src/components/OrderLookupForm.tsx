@@ -70,7 +70,7 @@ export default function OrderLookupForm({ onOrderFound, onAlreadyRegistered }: O
     <div className="w-full max-w-md mx-auto">
       <div className="text-center mb-8">
         <h3 className="text-2xl font-bold text-white mb-2">
-          Key Mood Closing Party
+          Key Mood Closing Show
         </h3>
         <h3 className="text-white/90 mb-2">
           Hangar 33 - Open Doors 4:30
