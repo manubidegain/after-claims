@@ -12,6 +12,7 @@ interface TicketData {
   name: string;
   eventid: string;
   etid: string;
+  qty: number;
 }
 
 export default function Home() {

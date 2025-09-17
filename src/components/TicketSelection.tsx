@@ -9,6 +9,7 @@ interface TicketData {
   name: string;
   eventid: string;
   etid: string;
+  qty: number;
 }
 
 interface TicketSelectionProps {
@@ -18,6 +19,14 @@ interface TicketSelectionProps {
 }
 
 export default function TicketSelection({ ticketsData, totalTickets, onBack }: TicketSelectionProps) {
+  // Expand tickets based on their quantity
+  const expandedTickets = ticketsData.flatMap(ticket =>
+    Array.from({ length: ticket.qty }, (_, index) => ({
+      ...ticket,
+      uniqueId: `${ticket.tckid}-${index + 1}` // Create unique ID for each instance
+    }))
+  );
+
   const [selectedTickets, setSelectedTickets] = useState<Set<string>>(new Set());
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -121,23 +130,23 @@ Nos vemos el 20.9 a partir de las 04 am en Hangar 33
             Selecciona los tickets que quieres usar para el Key Mood Closing Show:
           </label>
           <div className="space-y-3">
-            {ticketsData.map((ticket) => (
+            {expandedTickets.map((ticket) => (
               <div
-                key={ticket.tckid}
-                onClick={() => toggleTicket(ticket.tckid)}
+                key={ticket.uniqueId}
+                onClick={() => toggleTicket(ticket.uniqueId)}
                 className={`p-4 rounded-lg border cursor-pointer transition-all duration-200 ${
-                  selectedTickets.has(ticket.tckid)
+                  selectedTickets.has(ticket.uniqueId)
                     ? 'bg-white/20 border-white/60 text-white'
                     : 'bg-white/5 border-white/20 text-white/80 hover:bg-white/10'
                 }`}
               >
                 <div className="flex justify-between items-center">
                   <div>
-                    <p className="font-medium">Ticket #{ticket.tckid}</p>
+                    <p className="font-medium">Ticket #{ticket.tckid} ({ticket.uniqueId.split('-')[1]}/{ticket.qty})</p>
                     <p className="text-sm opacity-75">ETID: {ticket.etid}</p>
                   </div>
                   <div className="text-right">
-                    {selectedTickets.has(ticket.tckid) ? '✓ Seleccionado' : 'Seleccionar'}
+                    {selectedTickets.has(ticket.uniqueId) ? '✓ Seleccionado' : 'Seleccionar'}
                   </div>
                 </div>
               </div>

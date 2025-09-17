@@ -64,6 +64,7 @@ export interface TicketInfo {
   name: string;
   eventid: string;
   etid: string;
+  qty: number;
 }
 
 const createConnection = async () => {
@@ -86,13 +87,14 @@ export const getOrderByTicketIdAndEmail = async (
     connection = await createConnection();
     
     const [rows] = await connection.execute(`
-      SELECT 
+      SELECT
         tii.tivid as orderId,
         tii.tckid,
         u.email,
         u.name,
         ti.eventid,
-        t.etid
+        t.etid,
+        t.qty
       FROM tickets_invoice ti
       INNER JOIN tickets_invoice_lines tii ON ti.tivid = tii.tivid
       INNER JOIN tickets t ON tii.tckid = t.tckid
@@ -124,16 +126,7 @@ export const saveAfterOrder = async (
   try {
     connection = await createConnection();
     
-    // Create table if it doesn't exist - order_id as primary key
-    await connection.execute(`
-      CREATE TABLE IF NOT EXISTS after_orders (
-        order_id VARCHAR(255) PRIMARY KEY,
-        email VARCHAR(255) NOT NULL,
-        quantity INT NOT NULL
-      )
-    `);
-    
-    // Insert the after order
+    // Insert or update the after order
     await connection.execute(`
       INSERT INTO after_orders (order_id, email, quantity) 
       VALUES (?, ?, ?) 
@@ -153,25 +146,24 @@ export const saveAfterOrder = async (
 export const checkAfterOrderExists = async (
   orderId: string,
   email: string
-): Promise<{ exists: boolean; quantity?: number; email?: string }> => {
+): Promise<{ exists: boolean; quantity?: number; createdAt?: string }> => {
   let connection;
   
   try {
     connection = await createConnection();
     
     const [rows] = await connection.execute(`
-      SELECT quantity, email
+      SELECT quantity
       FROM after_orders 
       WHERE order_id = ?
-    `, [orderId]);
+    `, [orderId, email]);
 
-    const results = rows as Array<{ quantity: number; email: string }>;
+    const results = rows as Array<{ quantity: number; created_at: string }>;
     
     if (results.length > 0) {
       return {
         exists: true,
         quantity: results[0].quantity,
-        email: results[0].email
       };
     }
     
