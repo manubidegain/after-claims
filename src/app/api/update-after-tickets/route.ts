@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
 
     if (!success) {
       return NextResponse.json(
-        { error: 'Error al guardar la información del closing party' },
+        { error: 'Tus tickets ya fueron registrados, si crees que esto es un error contactanos a hola@entraste.com' },
         { status: 500 }
       );
     }
