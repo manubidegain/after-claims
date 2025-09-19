@@ -1,42 +1,8 @@
 'use client';
 
 import Image from 'next/image';
-import OrderLookupForm from '@/components/OrderLookupForm';
-import TicketSelection from '@/components/TicketSelection';
-import { useState } from 'react';
-
-interface TicketData {
-  orderId: string;
-  tckid: string;
-  email: string;
-  name: string;
-  eventid: string;
-  etid: string;
-  qty: number;
-}
 
 export default function Home() {
-  const [ticketsData, setTicketsData] = useState<TicketData[] | null>(null);
-  const [totalTickets, setTotalTickets] = useState<number>(0);
-  const [alreadyRegistered, setAlreadyRegistered] = useState<{quantity: number, registeredEmail: string} | null>(null);
-
-  const handleOrderFound = (tickets: TicketData[], totalTicketsCount: number) => {
-    setTicketsData(tickets);
-    setTotalTickets(totalTicketsCount);
-    setAlreadyRegistered(null);
-  };
-
-  const handleAlreadyRegistered = (quantity: number, registeredEmail: string) => {
-    setAlreadyRegistered({quantity, registeredEmail});
-    setTicketsData(null);
-    setTotalTickets(0);
-  };
-
-  const handleBackToSearch = () => {
-    setTicketsData(null);
-    setTotalTickets(0);
-    setAlreadyRegistered(null);
-  };
 
   return (
     <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-400 via-teal-400 to-cyan-500">
@@ -104,41 +70,13 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Form or Ticket Selection */}
+          {/* Closed Form Message */}
           <div className="bg-black/70 backdrop-blur-md rounded-2xl p-8 border border-white/30">
-            {!ticketsData && !alreadyRegistered ? (
-              <OrderLookupForm 
-                onOrderFound={handleOrderFound} 
-                onAlreadyRegistered={handleAlreadyRegistered}
-              />
-            ) : alreadyRegistered ? (
-              <div className="w-full max-w-md mx-auto text-center">
-                <div className="bg-orange-500/20 border border-orange-500/50 rounded-lg p-6 mb-6">
-                  <div className="text-orange-200 text-lg font-medium mb-2">
-                    Orden ya registrada
-                  </div>
-                  <p className="text-orange-200/80 mb-3">
-                    Esta orden ya fue registrada para el Key Mood Closing Show
-                  </p>
-                  <div className="text-orange-200/80 text-sm space-y-1">
-                    <p><strong>Tickets registrados:</strong> {alreadyRegistered.quantity}</p>
-                  </div>
-                </div>
-                
-                <button
-                  onClick={handleBackToSearch}
-                  className="bg-white/20 hover:bg-white/30 border border-white/30 text-white font-medium py-3 px-6 rounded-lg transition-all duration-200 backdrop-blur-sm"
-                >
-                  Buscar otra orden
-                </button>
+            <div className="w-full max-w-md mx-auto text-center">
+              <div className="text-white text-xl font-medium">
+                Muchas gracias, el formulario está cerrado
               </div>
-            ) : ticketsData ? (
-              <TicketSelection
-                ticketsData={ticketsData}
-                totalTickets={totalTickets}
-                onBack={handleBackToSearch}
-              />
-            ) : null}
+            </div>
           </div>
         </div>
       </div>
