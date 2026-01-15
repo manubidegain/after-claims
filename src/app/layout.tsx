@@ -15,8 +15,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Key Mood Closing Show",
-  description: "Key Mood Closing Show",
+  title: "Chris Stussy Pop Up - Key Mood",
+  description: "Inscripción para el Pop Up de Chris Stussy en Luxo, La Barra",
 };
 
 export default function RootLayout({

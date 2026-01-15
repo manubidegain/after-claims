@@ -1,70 +1,14 @@
 import mysql from 'mysql2/promise';
 
-interface DatabaseOrder {
-  tckid: string;
-  userid: string;
-  date: string;
-  etid: string;
-  qty: number;
-  eventid: string;
-  subtotal: number;
-  service: number;
-  total: number;
-  osubtotal: number;
-  exchange: number;
-  oexchange: number;
-  currency: string;
-  status: string;
-}
-
-interface DatabaseUser {
-  userid: string;
-  rol: string;
-  status: string;
-  pass: string;
+export interface PopupRegistration {
+  id: number;
+  popup_id: number;
   name: string;
-  ci: string;
+  surname: string;
   email: string;
-  signup: string;
-  lastbuy: string | null;
-  birth_date: string;
-  avatar: string;
-  phone: string;
-  level: string;
-  badage: string;
-  zone: string | null;
-  subscribe: string;
-  country: string;
-  city: string;
-  banned: string | null;
-  ip: string | null;
-  referer: string;
-  ref: string | null;
-  mailchimp: string;
-  mercadopago: string;
-  sms: string;
-  oauth: string;
-  social: string | null;
-  econfirm: string;
-}
-
-export interface OrderWithUser {
-  orderId: string;
-  qty: number;
-  email: string;
-  name: string;
-  eventid: string;
-  etid: string;
-}
-
-export interface TicketInfo {
-  orderId: string;
-  tckid: string;
-  email: string;
-  name: string;
-  eventid: string;
-  etid: string;
-  qty: number;
+  ticket_quantity: number;
+  ip_address: string;
+  created_at: Date;
 }
 
 const createConnection = async () => {
@@ -77,38 +21,34 @@ const createConnection = async () => {
   });
 };
 
-export const getOrderByTicketIdAndEmail = async (
-  orderId: string, 
-  email: string
-): Promise<TicketInfo[]> => {
+export const createRegistration = async (
+  popupId: number,
+  name: string,
+  surname: string,
+  email: string,
+  ticketQuantity: number,
+  ipAddress: string
+): Promise<{ success: boolean; error?: string }> => {
   let connection;
-  
+
   try {
     connection = await createConnection();
-    
-    const [rows] = await connection.execute(`
-      SELECT
-        tii.tivid as orderId,
-        tii.tckid,
-        u.email,
-        u.name,
-        ti.eventid,
-        t.etid,
-        t.qty
-      FROM tickets_invoice ti
-      INNER JOIN tickets_invoice_lines tii ON ti.tivid = tii.tivid
-      INNER JOIN tickets t ON tii.tckid = t.tckid
-      INNER JOIN user u ON ti.userid = u.userid
-      WHERE tii.tivid = ? AND u.email = ?
-    `, [orderId, email]);
 
-    console.log('Query result rows:', rows); // Debugging line
-    console.log(email, orderId)
-    const results = rows as TicketInfo[];
-    return results;
-  } catch (error) {
+    await connection.execute(`
+      INSERT INTO popup_registrations (popup_id, name, surname, email, ticket_quantity, ip_address)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `, [popupId, name, surname, email, ticketQuantity, ipAddress]);
+
+    return { success: true };
+  } catch (error: unknown) {
     console.error('Database error:', error);
-    throw new Error('Error connecting to database');
+
+    // Check for duplicate email error
+    if (error && typeof error === 'object' && 'code' in error && error.code === 'ER_DUP_ENTRY') {
+      return { success: false, error: 'EMAIL_EXISTS' };
+    }
+
+    return { success: false, error: 'DATABASE_ERROR' };
   } finally {
     if (connection) {
       await connection.end();
@@ -116,23 +56,23 @@ export const getOrderByTicketIdAndEmail = async (
   }
 };
 
-export const saveAfterOrder = async (
-  orderId: string,
-  email: string,
-  quantity: number
+export const checkEmailExists = async (
+  popupId: number,
+  email: string
 ): Promise<boolean> => {
   let connection;
-  
+
   try {
     connection = await createConnection();
-    
-    // Insert or update the after order
-    await connection.execute(`
-      INSERT INTO after_orders (order_id, email, quantity) 
-      VALUES (?, ?, ?) 
-    `, [orderId, email, quantity]);
 
-    return true;
+    const [rows] = await connection.execute(`
+      SELECT id
+      FROM popup_registrations
+      WHERE popup_id = ? AND email = ?
+    `, [popupId, email]);
+
+    const results = rows as Array<{ id: number }>;
+    return results.length > 0;
   } catch (error) {
     console.error('Database error:', error);
     return false;
@@ -143,37 +83,63 @@ export const saveAfterOrder = async (
   }
 };
 
-export const checkAfterOrderExists = async (
-  orderId: string,
-  email: string
-): Promise<{ exists: boolean; quantity?: number; createdAt?: string }> => {
+export const countRegistrationsByIP = async (
+  popupId: number,
+  ipAddress: string
+): Promise<number> => {
   let connection;
-  
+
   try {
     connection = await createConnection();
-    
-    const [rows] = await connection.execute(`
-      SELECT quantity
-      FROM after_orders 
-      WHERE order_id = ?
-    `, [orderId, email]);
 
-    const results = rows as Array<{ quantity: number; created_at: string }>;
-    
-    if (results.length > 0) {
-      return {
-        exists: true,
-        quantity: results[0].quantity,
-      };
-    }
-    
-    return { exists: false };
+    const [rows] = await connection.execute(`
+      SELECT COUNT(*) as count
+      FROM popup_registrations
+      WHERE popup_id = ? AND ip_address = ?
+    `, [popupId, ipAddress]);
+
+    const results = rows as Array<{ count: number }>;
+    return results[0]?.count || 0;
   } catch (error) {
     console.error('Database error:', error);
-    return { exists: false };
+    return 0;
   } finally {
     if (connection) {
       await connection.end();
     }
   }
+};
+
+export const getTotalTicketsRequested = async (
+  popupId: number
+): Promise<number> => {
+  let connection;
+
+  try {
+    connection = await createConnection();
+
+    const [rows] = await connection.execute(`
+      SELECT COALESCE(SUM(ticket_quantity), 0) as total
+      FROM popup_registrations
+      WHERE popup_id = ?
+    `, [popupId]);
+
+    const results = rows as Array<{ total: number }>;
+    return results[0]?.total || 0;
+  } catch (error) {
+    console.error('Database error:', error);
+    return 0;
+  } finally {
+    if (connection) {
+      await connection.end();
+    }
+  }
+};
+
+export const isFormClosed = async (
+  popupId: number,
+  maxTickets: number
+): Promise<boolean> => {
+  const totalTickets = await getTotalTicketsRequested(popupId);
+  return totalTickets >= maxTickets;
 };
