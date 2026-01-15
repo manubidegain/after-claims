@@ -44,19 +44,6 @@ export default function Home() {
       <div className="relative z-10 pt-8 pb-4">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-start">
-            <div className="text-white">
-              <Image
-                src="/LogoKEY_Blanco.png"
-                alt="Key"
-                width={200}
-                height={100}
-                className="w-auto h-16 md:h-20"
-              />
-            </div>
-            <div className="text-right text-white">
-              <div className="text-sm md:text-base font-light">POP_UP</div>
-              <div className="text-lg md:text-xl font-bold">{popupConfig.date}</div>
-            </div>
           </div>
         </div>
       </div>

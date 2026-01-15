@@ -104,12 +104,12 @@ export default function RegistrationForm({ popupConfig }: RegistrationFormProps)
   return (
     <div className="w-full max-w-md mx-auto p-8 bg-black/70 backdrop-blur-md border border-white/30 rounded-lg shadow-2xl">
       <div className="mb-8 text-center">
-        <h1 className="text-2xl md:text-3xl font-bold text-white mb-4 uppercase">
+        <h1 className="text-xl md:text-3xl font-bold text-white mb-4 uppercase">
           Registrate y participá por uno de los 150 accesos exclusivos
         </h1>
         <div className="text-white/90 space-y-3 mb-4">
           <p className="text-base">
-            Registrate y participá vas a vivir un set íntimo y único el sábado 17.01 a las 18 hs en Luxo, La Barra
+            Para vivir un set íntimo y único el sábado 17.01 de 18 a 20hs en Luxo, La Barra
           </p>
         </div>
         <div className="bg-white/10 px-4 py-3 rounded-lg border border-white/20">
