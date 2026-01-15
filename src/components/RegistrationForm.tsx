@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
 import { PopupConfig } from '@/config/popups';
+import { useState } from 'react';
 
 interface RegistrationFormProps {
   popupConfig: PopupConfig;
@@ -47,7 +47,7 @@ export default function RegistrationForm({ popupConfig }: RegistrationFormProps)
       }
 
       setSuccess(true);
-    } catch (err) {
+    } catch {
       setError('Error de conexión. Por favor, intenta de nuevo.');
       setLoading(false);
     }
