@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { isFormClosed } from '@/lib/database';
+import { getTotalTicketsRequested } from '@/lib/database';
 import { ACTIVE_POPUP_ID, getPopupConfig } from '@/config/popups';
 
 export async function GET() {
@@ -13,11 +13,14 @@ export async function GET() {
       );
     }
 
-    const closed = await isFormClosed(ACTIVE_POPUP_ID, popupConfig.maxTickets);
+    // Calculate total allowed tickets including female-only pool
+    const totalAllowedTickets = popupConfig.maxTickets + (popupConfig.maxFemaleTickets || 0);
+    const totalTickets = await getTotalTicketsRequested(ACTIVE_POPUP_ID);
+    const closed = totalTickets >= totalAllowedTickets;
 
     return NextResponse.json({
       closed,
-      maxTickets: popupConfig.maxTickets,
+      maxTickets: totalAllowedTickets,
     });
   } catch (error) {
     console.error('Form status check error:', error);
