@@ -186,9 +186,7 @@ export default function RegistrationForm({ popupConfig }: RegistrationFormProps)
             className="w-full px-4 py-3 bg-black/30 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
             disabled={loading}
           >
-            <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
-            <option value="Otro">Otro</option>
           </select>
         </div>
 

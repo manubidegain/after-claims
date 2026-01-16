@@ -4,6 +4,7 @@ export interface PopupConfig {
   eventName: string;
   maxTickets: number;
   maxTicketsPerIP: number;
+  maxFemaleTickets?: number; // Additional tickets reserved for females only
   date: string;
   time: string;
   location: string;
@@ -22,6 +23,7 @@ export const POPUP_CONFIGS: Record<number, PopupConfig> = {
     eventName: 'POP UP CHRIS STUSSY',
     maxTickets: 300,
     maxTicketsPerIP: 5,
+    maxFemaleTickets: 150, // Additional 150 tickets reserved for females only
     date: '17-01-26',
     time: '19.00 - 20.00 HS',
     location: 'LUXO, LA BARRA - PDE, UY',

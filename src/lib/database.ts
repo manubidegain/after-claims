@@ -138,6 +138,33 @@ export const getTotalTicketsRequested = async (
   }
 };
 
+export const getTotalTicketsByGender = async (
+  popupId: number,
+  gender: 'Masculino' | 'Femenino' | 'Otro'
+): Promise<number> => {
+  let connection;
+
+  try {
+    connection = await createConnection();
+
+    const [rows] = await connection.execute(`
+      SELECT COALESCE(SUM(ticket_quantity), 0) as total
+      FROM popup_registrations
+      WHERE popup_id = ? AND gender = ?
+    `, [popupId, gender]);
+
+    const results = rows as Array<{ total: number }>;
+    return results[0]?.total || 0;
+  } catch (error) {
+    console.error('Database error:', error);
+    return 0;
+  } finally {
+    if (connection) {
+      await connection.end();
+    }
+  }
+};
+
 export const isFormClosed = async (
   popupId: number,
   maxTickets: number

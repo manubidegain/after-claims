@@ -3,7 +3,8 @@ import {
   createRegistration,
   checkEmailExists,
   countRegistrationsByIP,
-  isFormClosed,
+  getTotalTicketsRequested,
+  getTotalTicketsByGender,
 } from '@/lib/database';
 import { getPopupConfig } from '@/config/popups';
 
@@ -102,13 +103,40 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if form is closed (300 tickets reached)
-    const formClosed = await isFormClosed(parsedPopupId, popupConfig.maxTickets);
-    if (formClosed) {
-      return NextResponse.json(
-        { error: 'Lo sentimos, se alcanzó el límite de inscripciones' },
-        { status: 400 }
-      );
+    // Check ticket availability based on gender
+    const totalTickets = await getTotalTicketsRequested(parsedPopupId);
+    const totalFemaleTickets = await getTotalTicketsByGender(parsedPopupId, 'Femenino');
+
+    // Calculate total allowed tickets (general + female-only pool)
+    const totalAllowedTickets = popupConfig.maxTickets + (popupConfig.maxFemaleTickets || 0);
+
+    // For non-female registrations, check if general pool is exhausted
+    if (genderStr !== 'Femenino') {
+      if (totalTickets >= popupConfig.maxTickets) {
+        return NextResponse.json(
+          { error: 'Lo sentimos, se alcanzó el límite de inscripciones generales' },
+          { status: 400 }
+        );
+      }
+    } else {
+      // For female registrations, check total pool (general + female-only)
+      if (totalTickets >= totalAllowedTickets) {
+        return NextResponse.json(
+          { error: 'Lo sentimos, se alcanzó el límite de inscripciones' },
+          { status: 400 }
+        );
+      }
+
+      // If general pool is full, check female-only pool
+      if (totalTickets >= popupConfig.maxTickets) {
+        const femaleOnlyUsed = totalFemaleTickets - (popupConfig.maxTickets - (totalTickets - totalFemaleTickets));
+        if (popupConfig.maxFemaleTickets && femaleOnlyUsed >= popupConfig.maxFemaleTickets) {
+          return NextResponse.json(
+            { error: 'Lo sentimos, se alcanzó el límite de inscripciones para mujeres' },
+            { status: 400 }
+          );
+        }
+      }
     }
 
     // Check if email already registered
