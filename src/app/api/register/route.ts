@@ -26,10 +26,10 @@ function getClientIP(request: NextRequest): string {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { popupId, name, surname, email, ticketQuantity } = body;
+    const { popupId, name, surname, email, gender, ticketQuantity } = body;
 
     // Validate required fields
-    if (!popupId || !name || !surname || !email || !ticketQuantity) {
+    if (!popupId || !name || !surname || !email || !gender || !ticketQuantity) {
       return NextResponse.json(
         { error: 'Todos los campos son requeridos' },
         { status: 400 }
@@ -70,6 +70,16 @@ export async function POST(request: NextRequest) {
     if (!emailRegex.test(emailStr) || emailStr.length > 255) {
       return NextResponse.json(
         { error: 'Email inválido' },
+        { status: 400 }
+      );
+    }
+
+    // Validate gender is one of the allowed values
+    const genderStr = String(gender).trim();
+    const allowedGenders = ['Masculino', 'Femenino', 'Otro'];
+    if (!allowedGenders.includes(genderStr)) {
+      return NextResponse.json(
+        { error: 'Género inválido' },
         { status: 400 }
       );
     }
@@ -127,6 +137,7 @@ export async function POST(request: NextRequest) {
       nameStr,
       surnameStr,
       emailStr,
+      genderStr as 'Masculino' | 'Femenino' | 'Otro',
       parsedQuantity,
       clientIP
     );
@@ -152,6 +163,7 @@ export async function POST(request: NextRequest) {
         name: nameStr,
         surname: surnameStr,
         email: emailStr,
+        gender: genderStr,
         ticketQuantity: parsedQuantity,
       },
     });

@@ -8,7 +8,7 @@ import RegistrationForm from '@/components/RegistrationForm';
 
 export default function Home() {
   const [popupConfig, setPopupConfig] = useState(() => getPopupConfig(ACTIVE_POPUP_ID));
-  const [formClosed] = useState(false);
+  const [formClosed, setFormClosed] = useState(false);
 
   useEffect(() => {
     const config = getPopupConfig(ACTIVE_POPUP_ID);
@@ -16,6 +16,19 @@ export default function Home() {
       console.error('Popup configuration not found');
     }
     setPopupConfig(config);
+
+    // Check if form should be closed
+    const checkFormStatus = async () => {
+      try {
+        const response = await fetch('/api/form-status');
+        const data = await response.json();
+        setFormClosed(data.closed);
+      } catch (error) {
+        console.error('Error checking form status:', error);
+      }
+    };
+
+    checkFormStatus();
   }, []);
 
   if (!popupConfig) {
@@ -63,7 +76,7 @@ export default function Home() {
                   Inscripciones Cerradas
                 </h3>
                 <p className="text-white/80">
-                  Se alcanzó el límite de inscripciones para este evento.
+                  Se alcanzó el límite de inscripciones para este evento. Gracias por acompañarnos!
                 </p>
               </div>
             </div>

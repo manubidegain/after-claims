@@ -12,6 +12,7 @@ export default function RegistrationForm({ popupConfig }: RegistrationFormProps)
     name: '',
     surname: '',
     email: '',
+    gender: 'Masculino' as 'Masculino' | 'Femenino' | 'Otro',
     ticketQuantity: 1,
   });
   const [loading, setLoading] = useState(false);
@@ -34,6 +35,7 @@ export default function RegistrationForm({ popupConfig }: RegistrationFormProps)
           name: formData.name,
           surname: formData.surname,
           email: formData.email,
+          gender: formData.gender,
           ticketQuantity: formData.ticketQuantity,
         }),
       });
@@ -169,6 +171,25 @@ export default function RegistrationForm({ popupConfig }: RegistrationFormProps)
             placeholder="tu@email.com"
             disabled={loading}
           />
+        </div>
+
+        <div>
+          <label htmlFor="gender" className="block text-sm font-medium text-white/90 mb-2">
+            Género
+          </label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-3 bg-black/30 border border-white/30 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-white/50 focus:border-transparent"
+            disabled={loading}
+          >
+            <option value="Masculino">Masculino</option>
+            <option value="Femenino">Femenino</option>
+            <option value="Otro">Otro</option>
+          </select>
         </div>
 
         <div>

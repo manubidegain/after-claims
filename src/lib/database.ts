@@ -6,6 +6,7 @@ export interface PopupRegistration {
   name: string;
   surname: string;
   email: string;
+  gender: 'Masculino' | 'Femenino' | 'Otro';
   ticket_quantity: number;
   ip_address: string;
   created_at: Date;
@@ -26,6 +27,7 @@ export const createRegistration = async (
   name: string,
   surname: string,
   email: string,
+  gender: 'Masculino' | 'Femenino' | 'Otro',
   ticketQuantity: number,
   ipAddress: string
 ): Promise<{ success: boolean; error?: string }> => {
@@ -35,9 +37,9 @@ export const createRegistration = async (
     connection = await createConnection();
 
     await connection.execute(`
-      INSERT INTO popup_registrations (popup_id, name, surname, email, ticket_quantity, ip_address)
-      VALUES (?, ?, ?, ?, ?, ?)
-    `, [popupId, name, surname, email, ticketQuantity, ipAddress]);
+      INSERT INTO popup_registrations (popup_id, name, surname, email, gender, ticket_quantity, ip_address)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
+    `, [popupId, name, surname, email, gender, ticketQuantity, ipAddress]);
 
     return { success: true };
   } catch (error: unknown) {
